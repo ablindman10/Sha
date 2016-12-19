@@ -50,7 +50,7 @@ int main(void) {
     printf("Enter the password you wish to encrypt using sha-1: ");
     fgets(password, MAX, stdin);
     
-    printf("\n%s", password);
+    printf("The input was: %s", password);
     
     
     
@@ -76,16 +76,7 @@ int main(void) {
     
     
     
-    printf("%ld", ml);
-    
-
-    printf("\nHere is the bit array of the the chars:\n");
-    for(i = 0; i < ml; i++) {
-        for(j = 0; j < 8; j++) {
-            printf("%d", bitarry[i][j]);
-        }
-        printf("\n");
-    }
+    printf("The number of Chars inputed was: %ld\n", ml);
     
     //start the padding process
     ml = ml * 8;
@@ -99,7 +90,7 @@ int main(void) {
     //pad the last 64 bits
     
     //reprint large array
-    printf("After padding the bit array looks like:\n");
+    printf("After padding the bit array looks like:");
     for(i = 0; i < 56; i++) {
         if(i % 4 == 0)
             printf("\n");
@@ -108,7 +99,9 @@ int main(void) {
         printf(" ");
     }
     
-    
+    //array to hold hex, all only 448 bits will be used last 64 are reserved
+    //can move this to the top later, leave for now
+    int hexArray[16][8];
     
     
 }
@@ -134,14 +127,14 @@ void toBinary(char input, int *output) {
         
     int i, j, value;
     value = input;
-        for(i = 7; i >= 0; i--) {
+    
+    for(i = 7; i >= 0; i--) {
         if(value % 2 == 0) {
             output[i] = 0;  
         } 
         
-        else {
+        else
             output[i] = 1;
-        }
         value /= 2;
-        }
+    }
 }
