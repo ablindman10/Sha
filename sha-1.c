@@ -177,13 +177,26 @@ int main(void) {
         a = temp;
     }
     
+    /****************************************
+    * Here down is is a mess, ignore please
+    ****************************************/
     
-    int hash;
-    hash = rotl32(h0, 128) | rotl32(h1, 96) | rotl32(h2, 64) | rotl32(h3, 32) | h4;
+    //as it turns out we have to use an array of unsigned 8 bit ints to hold 160 bits for hash
+    
+    uint8_t hash[20];
+    //now has is 160 bits little endian
+    
+    //how the hell do we compare bits with a array?
+    //looks like NSA has some method for this on top of page 13
+    //NSA seems to be doing some very complex math for this
+    //all of our data types match, so thats a good sign
+    
+    
+    //hash = rotl32(h0, 128) | rotl32(h1, 96) | rotl32(h2, 64) | rotl32(h3, 32) | h4;
     
     //printf("\nhash output in little endian is: %d\n", hash);
-    //note hash must be big endian, maybe a few left shifts might do that?
-    
+    // hash has to be 160 bits and has to be big endian
+        
 }
 
 /*
