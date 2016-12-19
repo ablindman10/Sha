@@ -9,9 +9,26 @@
  * MISSING THE 1 PADDING
  * 
  */
+
+
+
+
+
+/*****************************************************************************
+ * NEED A FUNCTION CALLED binaryToHex
+ * function should take the bitarray input located on line 58, 
+ * and convert it to hex and store it in a new 2D array
+ * binaryToHex(int *input, int [what ever you can get to work])
+ * 
+ * in the end the binary array should be converted to hex, in such a way that
+ * 448 bits will become [14][8] hex array, see the following link page 5
+ * https://tools.ietf.org/html/rfc3174
+ * ***************************************************************************/
+
 #define MAX 100000 * sizeof(char)
 uint32_t rotl32 (uint32_t value, unsigned int count);
 void toBinary (char input, int *output);
+//binaryToHex(int *input,int [what ever you can get to work]);
 
 int main(void) {
     //Initialize variables
@@ -96,6 +113,14 @@ int main(void) {
     
 }
 
+/*
+void binaryToHex(int *input, int [what ever you can get to work]) {
+    
+    
+    
+    
+}
+*/
 
 //left shift rotate
 uint32_t rotl32 (uint32_t value, unsigned int count) {
