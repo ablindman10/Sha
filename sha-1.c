@@ -5,8 +5,9 @@
 #include <limits.h>
 
 /*
- * CURRENT CHAR LIMIT IS 56 CHARS INCLUDING SPACES ETC.....
- * MISSING THE 1 PADDING
+ * CURRENT CHAR LIMIT IS 55 CHARS INCLUDING SPACES ETC.....
+ * frist 55 chars are legal, 56th char is reserved for the 1 pad, and last 16 are reserved
+ * total of 64 chars, for a bit size of 512 bits
  * 
  */
 
@@ -59,19 +60,12 @@ int main(void) {
         ml++;
     
     //array of bits for each char value given, 512 bits
-    int bitarry[64][8];
+    int bitarray[64][8];
     
-    //assign them all the be 0, might not be needed
-    /*
-    for(i = 0; i < 64; i++) {
-        for(j = 0; j < 8; j++)
-            bitarry[i][j] = 0;
-    }
-    */
     
     //take the password and turn it into an array of bits
     for(i = 0; i < ml; i++) {
-        toBinary(password[i], bitarry[i]);
+        toBinary(password[i], bitarray[i]);
     }
     
     
@@ -81,21 +75,27 @@ int main(void) {
     //start the padding process
     ml = ml * 8;
     
-    //must pad to 448 bits
+    
+    
+    //pad rest of the 448 bits to 0
     for(i = ml / 8; i < 56; i++) {
         for(j = 0; j < 8; j++)
-            bitarry[i][j] = 0;
+            bitarray[i][j] = 0;
     }
+    
+    //pad the 1 on the ml + 1 location, example if input is abcde, ml = 40, pad 41 location to be 1 
+    bitarray[ml / 8][0] = 1;
+    
     
     //pad the last 64 bits
     
     //reprint large array
-    printf("After padding the bit array looks like:");
+    printf("After padding the frist 448 bits the array looks like:");
     for(i = 0; i < 56; i++) {
         if(i % 4 == 0)
             printf("\n");
         for(j = 0; j < 8; j++)
-            printf("%d", bitarry[i][j]);
+            printf("%d", bitarray[i][j]);
         printf(" ");
     }
     
