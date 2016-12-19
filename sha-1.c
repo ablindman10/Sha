@@ -8,6 +8,7 @@
  * CURRENT CHAR LIMIT IS 55 CHARS INCLUDING SPACES ETC.....
  * frist 55 chars are legal, 56th char is reserved for the 1 pad, and last 16 are reserved
  * total of 64 chars, for a bit size of 512 bits
+ * NEED TO CLEAN ARRAYS AS WE MOVE
  * 
  */
 
@@ -17,13 +18,24 @@
 
 /*****************************************************************************
  * NEED A FUNCTION CALLED binaryToHex
+ * function should be called on line 107
  * function should take the bitarray input located on line 58, 
- * and convert it to hex and store it in a new 2D array
+ * and convert it to hex and store it in a new array
  * binaryToHex(int *input, int [what ever you can get to work])
  * 
  * in the end the binary array should be converted to hex, in such a way that
- * 448 bits will become [14][8] hex array, see the following link page 5
+ * 448 bits will become [14] hex array, see the following link page 5
  * https://tools.ietf.org/html/rfc3174
+ * 
+ * for example abcde in hex array form should look like this
+ * 
+ * 
+ * index  [1]      [2]      [3]      [3]    ...
+ *      61626364 65800000 00000000 00000000 ...
+ * 
+ * 
+ * 61626364 is one hex number, with that value so we can easily shift and xor it
+ * 
  * ***************************************************************************/
 
 #define MAX 100000 * sizeof(char)
@@ -90,8 +102,8 @@ int main(void) {
     //pad the last 64 bits
     
     //reprint large array
-    printf("After padding the frist 448 bits the array looks like:");
-    for(i = 0; i < 56; i++) {
+    printf("After padding the 512 bits the array looks like:");
+    for(i = 0; i <= 63; i++) {
         if(i % 4 == 0)
             printf("\n");
         for(j = 0; j < 8; j++)
@@ -101,8 +113,76 @@ int main(void) {
     
     //array to hold hex, all only 448 bits will be used last 64 are reserved
     //can move this to the top later, leave for now
-    int hexArray[16][8];
+    int hexArray[16];
     
+    //insert call the binaryToHex function here
+    
+    
+    
+    //last step of the padding process, store message length (ml) as a big endian
+    
+    
+    
+    
+    //create large hex array for extention, should be extened to hold 80 total "numbers"
+    int largeHexArray[80];
+    
+    //copy old values into new one
+    for(i = 0; i < 16; i++)
+        largeHexArray[i] = hexArray[i];
+    
+    //extend 16 hex words into 80
+    for(i = 16; i < 80; i++) {
+        largeHexArray[i] = rotl32((largeHexArray[i - 3] ^ largeHexArray[i - 8] ^ largeHexArray[i - 14] ^ largeHexArray[i - 16]), 1);
+    }
+    
+    
+    //needed for main loop
+    int a, b, c, d, e, f, k, temp;
+    a = h0;
+    b = h1;
+    c = h2;
+    d = h3;
+    e = h4;
+    
+    
+    
+    //main loop
+    for(i = 0; i < 80; i++) {
+        if(i >= 0 && i <= 19) {
+            f = (b & c) | ((~b) & d);
+            k = 0x5A827999;
+        }
+        
+        else if (i >= 20 && i <= 39) {
+            f = b ^ c ^ d;
+            k = 0x6ED9EBA1;
+        }
+        
+        else if (i >= 40 && i <= 59) {
+            f = (b & c) | (b & d) | (c & d);
+            k = 0x8F1BBCDC;
+        }
+        
+        else if (i >= 60 && i <= 79) {
+            f = b ^ c ^ d;
+            k = 0xCA62C1D6;
+        }
+        
+        temp = (rotl32(a, 5)) + f + e + k + largeHexArray[i];
+        e = d;
+        d = c;
+        c = rotl32(b, 30);
+        b = a;
+        a = temp;
+    }
+    
+    
+    int hash;
+    hash = rotl32(h0, 128) | rotl32(h1, 96) | rotl32(h2, 64) | rotl32(h3, 32) | h4;
+    
+    //printf("\nhash output in little endian is: %d\n", hash);
+    //note hash must be big endian, maybe a few left shifts might do that?
     
 }
 
