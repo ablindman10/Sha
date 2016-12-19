@@ -22,7 +22,7 @@ int main(void) {
     //printf("Enter a value to test: ");
     //scanf("%d", &value);
     
-    value = 0x00000008;
+    value = 0x000000Af;
     printf("Value captured was %X\n", value);
     
     for (i = 1; i <= 15; i++) {
