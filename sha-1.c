@@ -42,13 +42,14 @@
 #define MAX 100000 * sizeof(char)
 uint32_t rotl32 (uint32_t value, unsigned int count);
 void toBinary (char input, int *output);
+void messageLengthPad(uint32_t length, uint32_t *array);
 //binaryToHex(int *input,int [what ever you can get to work]);
 
 int main(void) {
     //Initialize variables
     int i, j;
     uint32_t h0, h1, h2, h3, h4;
-    unsigned long ml = 0;
+    uint32_t ml = 0;
     
     //password can be size of 100,000 chars
     char password[MAX];
@@ -83,15 +84,15 @@ int main(void) {
     
     
     
-    printf("The number of Chars inputed was: %ld\n", ml);
+    printf("The number of Chars inputed was: %d\n", ml);
     
     //start the padding process
     ml = ml * 8;
     
     
     
-    //pad rest of the 448 bits to 0
-    for(i = ml / 8; i < 56; i++) {
+    //pad rest of the 512 bits to 0
+    for(i = ml / 8; i < 64; i++) {
         for(j = 0; j < 8; j++)
             bitarray[i][j] = 0;
     }
@@ -100,12 +101,8 @@ int main(void) {
     bitarray[ml / 8][0] = 1;
     
     
-    //pad the last 64 bits big endian
-    /*
-    for(i = 56; i < 64; i++) {
-        toBinary(password[i]
-    }
-    */
+    //pad the last 64 bits big endian, so that it contains the message length
+    messageLengthPad(ml, *bitarray);
     
     
     //reprint large array
@@ -214,6 +211,26 @@ void binaryToHex(int *input, int [what ever you can get to work]) {
     
 }
 */
+
+
+void messageLengthPad(uint32_t length, uint32_t *array) {
+    
+    int i, j;
+    j = 1;
+    for(i = 511; i >= 417; i--) {
+        if(length % 2 == 0) {
+        *(array + i) = 0;
+        }
+        
+        else
+            *(array + i) = 1;
+        length /= 2;
+    }
+    
+    
+    
+}
+
 
 //left shift rotate
 uint32_t rotl32 (uint32_t value, unsigned int count) {
