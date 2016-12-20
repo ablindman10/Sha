@@ -9,6 +9,7 @@
  * frist 55 chars are legal, 56th char is reserved for the 1 pad, and last 16 are reserved
  * total of 64 chars, for a bit size of 512 bits
  * NEED TO CLEAN ARRAYS AS WE MOVE
+ * fix array data types
  * 
  */
 
@@ -46,7 +47,7 @@ void toBinary (char input, int *output);
 int main(void) {
     //Initialize variables
     int i, j;
-    unsigned int h0, h1, h2, h3, h4;
+    uint32_t h0, h1, h2, h3, h4;
     unsigned long ml = 0;
     
     //password can be size of 100,000 chars
@@ -99,7 +100,13 @@ int main(void) {
     bitarray[ml / 8][0] = 1;
     
     
-    //pad the last 64 bits
+    //pad the last 64 bits big endian
+    /*
+    for(i = 56; i < 64; i++) {
+        toBinary(password[i]
+    }
+    */
+    
     
     //reprint large array
     printf("After padding the 512 bits the array looks like:");
@@ -113,7 +120,7 @@ int main(void) {
     
     //array to hold hex, all only 448 bits will be used last 64 are reserved
     //can move this to the top later, leave for now
-    int hexArray[16];
+    uint32_t hexArray[16];
     
     //insert call the binaryToHex function here
     
@@ -125,7 +132,7 @@ int main(void) {
     
     
     //create large hex array for extention, should be extened to hold 80 total "numbers"
-    int largeHexArray[80];
+    uint32_t largeHexArray[80];
     
     //copy old values into new one
     for(i = 0; i < 16; i++)
@@ -138,7 +145,7 @@ int main(void) {
     
     
     //needed for main loop
-    int a, b, c, d, e, f, k, temp;
+    uint32_t a, b, c, d, e, f, k, temp;
     a = h0;
     b = h1;
     c = h2;
